@@ -12,8 +12,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 const schema = z.object({
   email: z.string().email(),
-  password: z.string().min(4),
+  password: z
+    .string()
+    .min(4, "The Password must be at least 4 characters long"),
 });
+
+type FormDataProps = z.infer<typeof schema>;
 
 export function SignInForm() {
   const {
@@ -28,8 +32,8 @@ export function SignInForm() {
     },
   });
 
-  const onSubmit = (fields: SubmitHandler<FieldValues>) => {
-    console.log(fields);
+  const onSubmit = (field: FormDataProps) => {
+    console.log(field);
   };
 
   return (
@@ -67,7 +71,7 @@ export function SignInForm() {
           )}
         />
 
-        {errors.email && <span>{String(errors?.email?.password)}</span>}
+        {errors.password && <span>{String(errors?.password?.message)}</span>}
 
         <button type="submit" className="bg-purple-400 py-3 px-2 rounded">
           Submit
